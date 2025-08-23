@@ -25,22 +25,51 @@
     position: fixed; top: 24px; left: 50%; transform: translateX(-50%); z-index: 2;
     font-variant-numeric: tabular-nums;
     font-size: clamp(36px, 6vw, 96px); font-weight: 700; letter-spacing: .04em;
-    padding: 8px 16px; border-radius: 12px;
+    padding: 10px 18px; border-radius: 12px;
     background: rgba(0,0,0,.25); backdrop-filter: blur(6px);
     text-shadow: 0 2px 12px rgba(0,0,0,.6);
+    text-align: center;           /* centers time + date stack */
+    line-height: 1.15;            /* tighter vertical spacing */
   }
 </style>
 </head>
 <body>
   <div class="wallpaper" role="img" aria-label="Inspirational wallpaper"></div>
-  <div class="clock" id="clock">--:--</div>
-  <script>
-    function pad(n){return String(n).padStart(2,"0")}
-    function tick(){
-      const d=new Date();
-      document.getElementById("clock").textContent = `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
-    }
-    tick(); setInterval(tick,1000);
-  </script>
+  <div class="clock">
+    <div id="clock-time">--:--</div>
+    <div id="clock-date" style="font-size: clamp(14px, 2.4vw, 24px); font-weight: 500; opacity: 0.9;">—</div>
+  </div>
+
+<script>
+  const WEEKDAYS = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+  const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+  function pad2(n){ return String(n).padStart(2,"0"); }
+
+  function tick(){
+    const d = new Date();
+
+    // --- Time (HH:MM AM/PM) ---
+    let hours = d.getHours();
+    const minutes = pad2(d.getMinutes());
+    const ampm = hours >= 12 ? "PM" : "AM";
+    hours = hours % 12;               // 0..11
+    if (hours === 0) hours = 12;      // 12-hour clock
+    const timeStr = `${hours}:${minutes} ${ampm}`;
+    document.getElementById("clock-time").textContent = timeStr;
+
+    // --- Date (Weekday, Mon DD) ---
+    const weekday = WEEKDAYS[d.getDay()];
+    const mon = MONTHS[d.getMonth()];
+    const day = d.getDate();          // 1..31 (no leading zero, no year)
+    const dateStr = `${weekday}, ${mon} ${day}`;
+    document.getElementById("clock-date").textContent = dateStr;
+  }
+
+  tick();
+  // Update once a minute is enough (no seconds)
+  setInterval(tick, 15 * 1000); // every 15s to keep minute in sync even after tab sleeping
+</script>
+
 </body>
 </html>
