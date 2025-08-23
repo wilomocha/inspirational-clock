@@ -30,7 +30,7 @@
     z-index: 2;
 
     display: inline-block;
-    width: min(50vw, var(--img-w, 100vw));  /* half screen but not beyond visible image */
+    width: min(80vw, var(--img-w, 100vw));  /* 0.8 screen but not beyond visible image */
     text-align: center;
 
     /* remove shaded box */
@@ -105,7 +105,7 @@
 <body>
   <div class="wallpaper" role="img" aria-label="Inspirational wallpaper"></div>
   <div class="clock">
-    <div id="clock-time" style="font-size: 1em;">--:--</div>
+    <div id="clock-time">--:--</div>
     <div id="clock-date" style="font-size: 0.45em; font-weight: 500; opacity: 0.9;">—</div>
   </div>
   <button id="fs-btn" title="Fullscreen">⛶</button>
@@ -255,7 +255,7 @@
     // 1) get available inner width (minus padding)
     const cs = getComputedStyle(clock);
     const padX = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
-    const targetW = (clock.getBoundingClientRect().width - padX) * 0.8;
+    const targetW = (clock.getBoundingClientRect().width - padX) * 0.98;
 
 
     // 2) Measure current width at a known font size (100px), then scale.
