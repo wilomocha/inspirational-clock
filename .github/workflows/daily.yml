@@ -30,7 +30,6 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           CATBOX_USERHASH: ${{ secrets.CATBOX_USERHASH }}
-          IMG_QUALITY: high
         run: npm run build
 
       # ✅ Commit the updated data/links.json (and any other generated files you want to persist)
