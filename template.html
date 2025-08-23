@@ -218,6 +218,84 @@
 
   // Start hidden on load
   document.getElementById("fs-btn").classList.add("hidden");
+
+  // --- helper you already added (leave as-is if present) ---
+  function extractBgUrl(str){ const m = str.match(/url\((['"]?)(.*?)\1\)/i); return m ? m[2] : null; }
+  function computeContainWidth(vw, vh, imgW, imgH){ const s = Math.min(vw/imgW, vh/imgH); return imgW * s; }
+
+  async function setClockMaxWidthFromImage(){
+    try {
+      const wp = document.querySelector('.wallpaper');
+      if (!wp) return;
+      const style = getComputedStyle(wp);
+      const bgUrl = extractBgUrl(style.backgroundImage);
+      if (!bgUrl) return;
+
+      const img = new Image();
+      img.decoding = 'async';
+      img.src = bgUrl;
+      await (img.complete ? Promise.resolve() : new Promise((res, rej)=>{ img.onload=res; img.onerror=rej; }));
+
+      const vw = window.innerWidth, vh = window.innerHeight;
+      const dispW = computeContainWidth(vw, vh, img.naturalWidth, img.naturalHeight);
+      document.documentElement.style.setProperty('--img-w', dispW + 'px');
+    } catch (e) {
+      console.warn('[clock-width]', e);
+    }
+  }
+
+  // --- NEW: fit the time text to the clock box width ---
+  function fitClockText(){
+    const clock = document.querySelector('.clock');
+    const timeEl = document.getElementById('clock-time');
+    const dateEl = document.getElementById('clock-date');
+    if (!clock || !timeEl || !dateEl) return;
+
+    // Target: make the time line fill the inner width of the .clock box.
+    // 1) get available inner width (minus padding)
+    const cs = getComputedStyle(clock);
+    const padX = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
+    const targetW = Math.max(10, clock.getBoundingClientRect().width - padX);
+
+    // 2) Measure current width at a known font size (100px), then scale.
+    // (Tabular numerals help keep width predictable.)
+    const oldSize = timeEl.style.fontSize;
+    timeEl.style.fontSize = '100px';
+    // Force reflow so scrollWidth is accurate
+    const measured = timeEl.scrollWidth || timeEl.getBoundingClientRect().width || 1;
+    const scale = targetW / measured;
+
+    // 3) Apply scaled size; cap for safety
+    const newPx = Math.min(220, Math.max(16, 100 * scale));
+    timeEl.style.fontSize = newPx + 'px';
+
+    // 4) Date follows proportionally
+    dateEl.style.fontSize = Math.max(12, Math.round(newPx * 0.42)) + 'px';
+
+    // restore (not strictly needed since we overwrote)
+    // timeEl.style.fontSize = newPx + 'px';
+  }
+
+  // Call this whenever layout could change
+  function relayout(){
+    setClockMaxWidthFromImage().then(fitClockText).catch(()=>fitClockText());
+  }
+
+  // Initial
+  relayout();
+
+  // Re-run on resize/orientation changes
+  addEventListener('resize', relayout);
+  addEventListener('orientationchange', relayout);
+
+  // Also re-fit right after tick(), because “9:08 AM” → “10:08 AM” changes width
+  const _oldTick = tick;
+  window.tick = function(){
+    _oldTick();
+    // Queue after DOM updates
+    requestAnimationFrame(fitClockText);
+  };
+
 </script>
 
 </body>
