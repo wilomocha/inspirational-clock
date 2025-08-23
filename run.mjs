@@ -26,6 +26,16 @@ async function generateImage() {
 async function uploadToCatbox(filePath) {
   const form = new FormData();
   form.append("reqtype", "fileupload");
+
+  // ✅ Use authenticated uploads when CATBOX_USERHASH is set
+  const userhash = process.env.CATBOX_USERHASH && process.env.CATBOX_USERHASH.trim();
+  if (userhash) {
+    form.append("userhash", userhash);
+    console.log("[catbox] Using authenticated upload (userhash present).");
+  } else {
+    console.log("[catbox] No userhash found; attempting anonymous upload.");
+  }
+
   form.append("fileToUpload", await fs.readFile(filePath), {
     filename: path.basename(filePath),
     contentType: "image/png",
@@ -36,6 +46,19 @@ async function uploadToCatbox(filePath) {
     body: form,
     headers: form.getHeaders(),
   });
+
+  const text = (await resp.text()).trim();
+  const isUrl = /^https?:\/\//i.test(text);
+
+  if (resp.ok && isUrl) return text;
+
+  // Helpful diagnostics
+  if (/Anon Uploads are temporarily paused/i.test(text)) {
+    throw new Error("Catbox upload failed: anonymous uploads are paused and no valid userhash was used.");
+  }
+
+  throw new Error(`Catbox upload failed (status ${resp.status}): ${text}`);
+}
 
   const text = await resp.text();
   if (!resp.ok || !/^https?:\/\//i.test(text.trim())) {
