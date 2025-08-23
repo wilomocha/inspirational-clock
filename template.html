@@ -59,10 +59,13 @@
   cursor: pointer;
 
   backdrop-filter: blur(6px);
-  transition: background 0.2s ease;
+
+  opacity: 1;
+  transition: opacity 0.5s ease;
 }
-#fs-btn:hover {
-  background: rgba(0,0,0,0.65);
+#fs-btn.hidden {
+  opacity: 0;
+  pointer-events: none; /* avoid accidental clicks when hidden */
 }
 
 </style>
@@ -170,6 +173,27 @@ scheduleMidnightReload();
     if (!document.fullscreenElement) {
       fsBtn.textContent = "⛶";
     }
+
+  // --- Auto-hide fullscreen button after inactivity ---
+  let hideTimeout;
+  
+  function showButton() {
+    const btn = document.getElementById("fs-btn");
+    btn.classList.remove("hidden");
+  
+    clearTimeout(hideTimeout);
+    hideTimeout = setTimeout(() => {
+      btn.classList.add("hidden");
+    }, 3000); // 3 seconds of inactivity
+  }
+  
+  // Show button on any user activity
+  ["mousemove","keydown","touchstart"].forEach(evt => {
+    document.addEventListener(evt, showButton);
+  });
+  
+  // Start hidden after initial load
+  document.getElementById("fs-btn").classList.add("hidden");
 
 </script>
 
