@@ -255,7 +255,8 @@
     // 1) get available inner width (minus padding)
     const cs = getComputedStyle(clock);
     const padX = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
-    const targetW = Math.max(10, clock.getBoundingClientRect().width - padX);
+    const targetW = (clock.getBoundingClientRect().width - padX) * 0.8;
+
 
     // 2) Measure current width at a known font size (100px), then scale.
     // (Tabular numerals help keep width predictable.)
