@@ -6,7 +6,7 @@ import path from "path";
 
 const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-const PROMPT = `Create a vertical 9:16 inspirational wallpaper. First, generate a short and uplifting inspirational sentence. Then, design an artistic background that expresses the feeling or meaning of that sentence in a creative and symbolic way. Place the sentence somewhere visually balanced, keeping the top-center area clear for a digital clock overlay. Style, imagery, and symbolism are open to interpretation, aiming for something imaginative and motivational.`;
+const PROMPT = `Create a vertical 9:16 inspirational wallpaper. First, invent a **completely original short inspirational sentence** (avoid clichés like storms, sunshine, rainbows, mountains, horizons). Then, design an artistic background that symbolically expresses the meaning of that unique sentence in a creative way. Place the sentence somewhere visually balanced at the bottom half of the image but not the edge, keep the top-center area clear for a digital clock overlay.`;
 
 const IMG_SIZE = "1024x1536"; // near 9:16
 const IMG_QUALITY = process.env.IMG_QUALITY || "Low"; // "Low" "Medium" "High"
