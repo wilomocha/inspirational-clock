@@ -91,6 +91,36 @@ scheduleMidnightReload();
   tick();
   // Update once a minute is enough (no seconds)
   setInterval(tick, 15 * 1000); // every 15s to keep minute in sync even after tab sleeping
+  
+  // --- Wake Lock to prevent screen sleep ---
+  let wakeLock = null;
+
+  async function requestWakeLock() {
+    try {
+      if ('wakeLock' in navigator) {
+        wakeLock = await navigator.wakeLock.request('screen');
+        console.log("[WakeLock] Screen lock acquired");
+
+        wakeLock.addEventListener('release', () => {
+          console.log('[WakeLock] Screen lock released');
+        });
+      } else {
+        console.log("[WakeLock] API not supported in this browser");
+      }
+    } catch (err) {
+      console.error(`[WakeLock] Error: ${err.name}, ${err.message}`);
+    }
+  }
+
+  // Request on load
+  requestWakeLock();
+
+  // Re-request when visibility changes (e.g. user switches tabs)
+  document.addEventListener('visibilitychange', () => {
+    if (wakeLock !== null && document.visibilityState === 'visible') {
+      requestWakeLock();
+    }
+
 </script>
 
 </body>
