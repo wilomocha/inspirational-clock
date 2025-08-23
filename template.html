@@ -65,6 +65,14 @@
     const dateStr = `${weekday}, ${mon} ${day}`;
     document.getElementById("clock-date").textContent = dateStr;
   }
+  
+  function scheduleMidnightReload() {
+  const now = new Date();
+  const msUntilMidnight = 
+    new Date(now.getFullYear(), now.getMonth(), now.getDate()+1, 0, 0, 5) - now;
+  setTimeout(() => location.reload(true), msUntilMidnight);
+}
+scheduleMidnightReload();
 
   tick();
   // Update once a minute is enough (no seconds)
