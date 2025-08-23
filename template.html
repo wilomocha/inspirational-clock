@@ -44,6 +44,26 @@
   backdrop-filter: blur(8px);
   text-shadow: 0 3px 14px rgba(0,0,0,.6);
 }
+#fs-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 3;
+
+  background: rgba(0,0,0,0.4);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 20px;
+  cursor: pointer;
+
+  backdrop-filter: blur(6px);
+  transition: background 0.2s ease;
+}
+#fs-btn:hover {
+  background: rgba(0,0,0,0.65);
+}
 
 </style>
 </head>
@@ -53,6 +73,7 @@
     <div id="clock-time" style="font-size: 1em;">--:--</div>
     <div id="clock-date" style="font-size: 0.45em; font-weight: 500; opacity: 0.9;">—</div>
   </div>
+  <button id="fs-btn" title="Fullscreen">⛶</button>
 
 <script>
   const WEEKDAYS = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
@@ -119,6 +140,35 @@ scheduleMidnightReload();
   document.addEventListener('visibilitychange', () => {
     if (wakeLock !== null && document.visibilityState === 'visible') {
       requestWakeLock();
+    }
+
+  // --- Fullscreen toggle ---
+  const fsBtn = document.getElementById("fs-btn");
+  
+  async function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+      try {
+        await document.documentElement.requestFullscreen();
+        fsBtn.textContent = "⤫"; // change icon to "exit" style
+      } catch (err) {
+        console.error("[Fullscreen] Error:", err);
+      }
+    } else {
+      try {
+        await document.exitFullscreen();
+        fsBtn.textContent = "⛶"; // reset to enter icon
+      } catch (err) {
+        console.error("[Fullscreen] Error:", err);
+      }
+    }
+  }
+  
+  fsBtn.addEventListener("click", toggleFullscreen);
+  
+  // Optional: revert button when exiting fullscreen via Esc
+  document.addEventListener("fullscreenchange", () => {
+    if (!document.fullscreenElement) {
+      fsBtn.textContent = "⛶";
     }
 
 </script>
