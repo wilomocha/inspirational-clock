@@ -60,13 +60,6 @@ async function uploadToCatbox(filePath) {
   throw new Error(`Catbox upload failed (status ${resp.status}): ${text}`);
 }
 
-  const text = await resp.text();
-  if (!resp.ok || !/^https?:\/\//i.test(text.trim())) {
-    throw new Error("Catbox upload failed: " + text);
-  }
-  return text.trim();
-}
-
 async function buildClockPage(imageUrl) {
   const tpl = await fs.readFile(path.join(process.cwd(), "template.html"), "utf8");
   const html = tpl.replaceAll("%%IMAGE_URL%%", imageUrl);
