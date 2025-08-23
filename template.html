@@ -21,53 +21,85 @@
     background-image: var(--bg); background-repeat: no-repeat;
     background-position: center; background-size: contain;
   }
-.clock {
-  position: fixed;
-  top: 33%;                 /* ~1/3 down the viewport */
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 2;
 
-  display: inline-block;
-  width: 50%;               /* takes up at least half the screen width */
-  text-align: center;
+  .clock {
+    position: fixed;
+    top: 33%;                 /* ~1/3 down the viewport */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
 
-  font-variant-numeric: tabular-nums;
-  font-size: clamp(48px, 8vw, 120px);   /* bigger time */
-  font-weight: 700;
-  letter-spacing: .04em;
-  line-height: 1.2;
+    display: inline-block;
+    width: min(50vw, var(--img-w, 100vw));  /* half screen but not beyond visible image */
+    text-align: center;
 
-  padding: 16px 24px;
-  border-radius: 16px;
-  background: rgba(0,0,0,.25);
-  backdrop-filter: blur(8px);
-  text-shadow: 0 3px 14px rgba(0,0,0,.6);
-}
-#fs-btn {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  z-index: 3;
+    /* remove shaded box */
+    background: none;
+    backdrop-filter: none;
+    border-radius: 0;
+    padding: 0;
+  }
 
-  background: rgba(0,0,0,0.4);
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  padding: 10px 14px;
-  font-size: 20px;
-  cursor: pointer;
+  #clock-time {
+    display: block;
+    width: 100%;
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    letter-spacing: .04em;
+    line-height: 1.1;
+    color: #fff;
 
-  backdrop-filter: blur(6px);
+    /* text outline */
+    text-shadow:
+      -3px -3px 0 #000,
+       3px -3px 0 #000,
+      -3px  3px 0 #000,
+       3px  3px 0 #000;
 
-  opacity: 1;
-  transition: opacity 0.5s ease;
-}
-#fs-btn.hidden {
-  opacity: 0;
-  pointer-events: none; /* avoid accidental clicks when hidden */
-}
+    /* base font scaling — JS fitText will fine-tune */
+    font-size: clamp(48px, 8vw, 220px);
+  }
 
+  #clock-date {
+    display: block;
+    margin-top: 0.25em;
+    font-weight: 500;
+    opacity: 0.9;
+    color: #fff;
+
+    /* thinner outline */
+    text-shadow:
+      -2px -2px 0 #000,
+       2px -2px 0 #000,
+      -2px  2px 0 #000,
+       2px  2px 0 #000;
+
+    font-size: 0.45em; /* relative to time */
+  }
+
+  #fs-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 3;
+
+    background: rgba(0,0,0,0.4);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 20px;
+    cursor: pointer;
+
+    backdrop-filter: blur(6px);
+
+    opacity: 1;
+    transition: opacity 0.5s ease;
+  }
+  #fs-btn.hidden {
+    opacity: 0;
+    pointer-events: none; /* avoid accidental clicks when hidden */
+  }
 </style>
 </head>
 <body>
