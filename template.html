@@ -87,44 +87,40 @@
   function tick(){
     const d = new Date();
 
-    // --- Time (HH:MM AM/PM) ---
+    // Time (HH:MM AM/PM)
     let hours = d.getHours();
     const minutes = pad2(d.getMinutes());
     const ampm = hours >= 12 ? "PM" : "AM";
-    hours = hours % 12;               // 0..11
-    if (hours === 0) hours = 12;      // 12-hour clock
-    const timeStr = `${hours}:${minutes} ${ampm}`;
-    document.getElementById("clock-time").textContent = timeStr;
+    hours = hours % 12;
+    if (hours === 0) hours = 12;
+    document.getElementById("clock-time").textContent = `${hours}:${minutes} ${ampm}`;
 
-    // --- Date (Weekday, Mon DD) ---
+    // Date (Weekday, Mon DD)
     const weekday = WEEKDAYS[d.getDay()];
     const mon = MONTHS[d.getMonth()];
-    const day = d.getDate();          // 1..31 (no leading zero, no year)
-    const dateStr = `${weekday}, ${mon} ${day}`;
-    document.getElementById("clock-date").textContent = dateStr;
+    const day = d.getDate();
+    document.getElementById("clock-date").textContent = `${weekday}, ${mon} ${day}`;
   }
-  
+
   function scheduleMidnightReload() {
-  const now = new Date();
-  const msUntilMidnight = 
-    new Date(now.getFullYear(), now.getMonth(), now.getDate()+1, 0, 0, 5) - now;
-  setTimeout(() => location.reload(true), msUntilMidnight);
-}
-scheduleMidnightReload();
+    const now = new Date();
+    const msUntilMidnight = new Date(
+      now.getFullYear(), now.getMonth(), now.getDate()+1, 0, 0, 5
+    ) - now;
+    setTimeout(() => location.reload(true), msUntilMidnight);
+  }
 
   tick();
-  // Update once a minute is enough (no seconds)
-  setInterval(tick, 15 * 1000); // every 15s to keep minute in sync even after tab sleeping
-  
+  setInterval(tick, 15 * 1000);
+  scheduleMidnightReload();
+
   // --- Wake Lock to prevent screen sleep ---
   let wakeLock = null;
-
   async function requestWakeLock() {
     try {
       if ('wakeLock' in navigator) {
         wakeLock = await navigator.wakeLock.request('screen');
         console.log("[WakeLock] Screen lock acquired");
-
         wakeLock.addEventListener('release', () => {
           console.log('[WakeLock] Screen lock released');
         });
@@ -135,66 +131,61 @@ scheduleMidnightReload();
       console.error(`[WakeLock] Error: ${err.name}, ${err.message}`);
     }
   }
-
-  // Request on load
   requestWakeLock();
 
-  // Re-request when visibility changes (e.g. user switches tabs)
+  // Re-request on visibility change
   document.addEventListener('visibilitychange', () => {
     if (wakeLock !== null && document.visibilityState === 'visible') {
       requestWakeLock();
     }
+  }); // <-- was missing
 
   // --- Fullscreen toggle ---
   const fsBtn = document.getElementById("fs-btn");
-  
+
   async function toggleFullscreen() {
     if (!document.fullscreenElement) {
       try {
         await document.documentElement.requestFullscreen();
-        fsBtn.textContent = "⤫"; // change icon to "exit" style
+        fsBtn.textContent = "⤫";
       } catch (err) {
         console.error("[Fullscreen] Error:", err);
       }
     } else {
       try {
         await document.exitFullscreen();
-        fsBtn.textContent = "⛶"; // reset to enter icon
+        fsBtn.textContent = "⛶";
       } catch (err) {
         console.error("[Fullscreen] Error:", err);
       }
     }
   }
-  
   fsBtn.addEventListener("click", toggleFullscreen);
-  
-  // Optional: revert button when exiting fullscreen via Esc
+
+  // Update button icon when user exits via Esc
   document.addEventListener("fullscreenchange", () => {
     if (!document.fullscreenElement) {
       fsBtn.textContent = "⛶";
     }
+  }); // <-- was missing
 
   // --- Auto-hide fullscreen button after inactivity ---
   let hideTimeout;
-  
   function showButton() {
     const btn = document.getElementById("fs-btn");
     btn.classList.remove("hidden");
-  
     clearTimeout(hideTimeout);
     hideTimeout = setTimeout(() => {
       btn.classList.add("hidden");
-    }, 3000); // 3 seconds of inactivity
+    }, 3000);
   }
-  
-  // Show button on any user activity
+
   ["mousemove","keydown","touchstart"].forEach(evt => {
     document.addEventListener(evt, showButton);
   });
-  
-  // Start hidden after initial load
-  document.getElementById("fs-btn").classList.add("hidden");
 
+  // Start hidden on load
+  document.getElementById("fs-btn").classList.add("hidden");
 </script>
 
 </body>
