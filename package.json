@@ -1,0 +1,13 @@
+{
+  "name": "inspo-clock",
+  "type": "module",
+  "version": "1.0.0",
+  "dependencies": {
+    "form-data": "^4.0.0",
+    "node-fetch": "^3.3.2",
+    "openai": "^4.56.0"
+  },
+  "scripts": {
+    "build": "node run.mjs"
+  }
+}
