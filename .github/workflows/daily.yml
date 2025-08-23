@@ -29,6 +29,7 @@ jobs:
       - name: Build (generate image, upload to Catbox, write index.html)
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          CATBOX_USERHASH: ${{ secrets.CATBOX_USERHASH }} 
         run: npm run build
 
       - name: Configure GitHub Pages
