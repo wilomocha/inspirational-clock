@@ -2,8 +2,8 @@ name: Daily Inspiration Clock
 
 on:
   schedule:
-    # Runs daily at 16:00 UTC (09:00 Los Angeles during PDT; 08:00 during PST)
-    - cron: "0 16 * * *"
+    # Runs daily at 13:00 UTC (06:00 Los Angeles during PDT; 05:00 during PST)
+    - cron: "0 13 * * *"
   workflow_dispatch: {}
 
 permissions:
