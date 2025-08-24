@@ -10,6 +10,7 @@ const PROMPT = `Create a vertical 9:16 inspirational wallpaper.First, generate a
 
 const IMG_SIZE = "1024x1536"; // near 9:16
 const IMG_QUALITY = process.env.IMG_QUALITY || "low"; // 'low', 'medium', 'high', and 'auto'
+const CATBOX_ALBUM_SHORT = "ou6aoj" // CATBOX_ALBUM_SHORT code
 
 async function generateImage() {
   const res = await client.images.generate({
@@ -53,6 +54,27 @@ async function uploadToCatbox(filePath) {
   const isUrl = /^https?:\/\//i.test(text);
 
   if (resp.ok && isUrl) return text;
+
+  // Add image to album
+async function addToAlbum({ short, files }) {
+  if (!CATBOX_USERHASH) throw new Error("addToAlbum requires CATBOX_USERHASH.");
+  const form = new FormData();
+  form.append("reqtype", "addtoalbum");
+  form.append("userhash", CATBOX_USERHASH);
+  form.append("short", CATBOX_ALBUM_SHORT);
+  form.append("files", files.join(" "));
+  const resp = await fetch("https://catbox.moe/user/api.php", {
+    method: "POST",
+    body: form,
+    headers: form.getHeaders(),
+  });
+  const text = (await resp.text()).trim();
+  if (!resp.ok || /ERROR/i.test(text)) {
+    throw new Error(`addToAlbum failed (${resp.status}): ${text}`);
+  }
+  return true;
+}
+  
 
   // Helpful diagnostics
   if (/Anon Uploads are temporarily paused/i.test(text)) {
