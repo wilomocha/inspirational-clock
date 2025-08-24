@@ -52,6 +52,7 @@
     z-index: 4;
   }
   
+  /* Adbar */
   .adbar a {
     display: inline-block;
     padding: 10px 14px;
@@ -100,14 +101,14 @@
     font-size: 0.45em; /* relative to time */
   }
 
-    /* Controls container: bottom-left & bottom-right with space between */
-  #controls {
+    #controls {
     position: fixed;
     bottom: 20px;
     left: 20px;
     right: 20px;
     display: flex;
-    justify-content: space-between;   /* info left, fullscreen right */
+    justify-content: space-between;  /* left-group vs right-group */
+    align-items: center;
     z-index: 3;
     opacity: 1;
     transition: opacity 0.5s ease;
@@ -115,6 +116,13 @@
   #controls.hidden {
     opacity: 0;
     pointer-events: none;
+  }
+  
+  .left-group,
+  .right-group {
+    display: flex;
+    gap: 10px;  /* space between items */
+    align-items: center;
   }
   
   /* Shared button style */
@@ -188,10 +196,20 @@
     <div id="clock-date">—</div>
   </div>
   <div id="controls">
-    <button id="info-btn" title="Info">ℹ️</button>
-    <button id="install-btn" title="Install" style="display:none;">⬇️ Install</button>
-    <button id="fs-btn" title="Fullscreen">⛶</button>
+    <div class="left-group">
+      <button id="info-btn" title="Info">ℹ️</button>
+      <div class="adbar">
+        <a href="https://www.buymeacoffee.com/wilomocha" target="_blank" rel="noopener">
+          ☕ Buy me a coffee
+        </a>
+      </div>
+    </div>
+    <div class="right-group">
+      <button id="install-btn" title="Install" style="display:none;">⬇️ Install</button>
+      <button id="fs-btn" title="Fullscreen">⛶</button>
+    </div>
   </div>
+
 
   <div id="info-panel">
     <div class="content">
@@ -208,11 +226,7 @@
     </div>
   </div>
     
-  <div class="adbar">
-    <a href="https://www.buymeacoffee.com/wilomocha" target="_blank" rel="noopener">
-      ☕ Buy me a coffee
-    </a>
-  </div>
+
 
 
 <script>
