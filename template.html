@@ -207,6 +207,7 @@
     </div>
     <div class="right-group">
       <button id="install-btn" title="Install" style="display:none;">⬇️ Install</button>
+      <button id="posters-btn" title="Old Posters">🖼️ Posters</button> 
       <button id="fs-btn" title="Fullscreen">⛶</button>
     </div>
   </div>
@@ -218,6 +219,9 @@
       <p>
         This Inspiration Clock shows the current time and date over a daily-changing
         inspirational wallpaper. The background updates automatically every day at around 6AM PDT with a new AI-generated design.
+      </p>
+      <p>
+        Click the time to toggle 12/24‑hour format.
       </p>
       <p>
         Use the fullscreen button for a clean display, and the wake-lock feature will
@@ -298,7 +302,15 @@ let timeFormat = localStorage.getItem('timeFormat') || '12'; // '12' | '24'
     if (wakeLock !== null && document.visibilityState === 'visible') {
       requestWakeLock();
     }
-  }); // <-- was missing
+  }); 
+
+// --- Old poster toggle ---
+  const postersBtn = document.getElementById('posters-btn');
+  if (postersBtn) {
+    postersBtn.addEventListener('click', () => {
+    window.open('https://catbox.moe/c/ou6aoj', '_blank', 'noopener');
+  });
+  }
 
   // --- Fullscreen toggle ---
   const fsBtn = document.getElementById("fs-btn");
