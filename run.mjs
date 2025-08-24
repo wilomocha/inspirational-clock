@@ -6,7 +6,24 @@ import path from "path";
 
 const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-const PROMPT = `Create a vertical 9:16 inspirational wallpaper.First, generate a short, completely original sentence (under 12 words) that feels fresh, uplifting, and thought-provoking while avoiding familiar clichés.The sentence must be written in correct, natural English with no spelling mistakes, no missing letters, and no invented words. Render this sentence exactly as written, without altering it, on the wallpaper. Then, design a background in any creative visual style—this could be photorealistic nature, painterly realism, minimalist design, abstract surrealism, whimsical illustration, or bold typography-led art. The imagery should symbolically or imaginatively resonate with the meaning of the sentence, without defaulting to overused motifs (like roads, horizons, or sunsets).Stylize the text so it integrates naturally with the background, placed in the lower half of the image, centered, with generous margins and always fully inside the frame. Keep the top-center third uncluttered for a digital clock overlay.The final design should feel modern, evocative, surprising, and visually striking.If any letter is unclear or resembles a different letter, regenerate until all characters are correct and legible.`;
+const PROMPT = 
+  `
+  Create a vertical 9:16 inspirational wallpaper.
+  First, generate a short, completely original sentence (under 12 words) that feels fresh, uplifting, and thought-provoking while avoiding familiar clichés.
+  The sentence must be in correct English, with no misspellings, no invented words, and no extra punctuation.
+  Render this exact sentence on the wallpaper, without changing or distorting it. 
+  Write it in plain, clear **uppercase letters (A–Z only, plus spaces and standard punctuation)**. 
+  Do not use decorative fonts, cursive, handwriting, ligatures, or stylized distortions. 
+  Do not merge or alter letters. Do not omit or repeat letters. 
+  The text must be fully legible, sharp, and correctly spelled. 
+  Keep the background behind the text simple so every letter is easy to read. 
+  Place the text in the lower half of the image, centered, with generous margins, and ensure the entire sentence stays fully inside the frame. 
+  Design a background in any creative visual style—this could be photorealistic nature, painterly realism, minimalist design, abstract surrealism, whimsical illustration, or bold typography-led art. 
+  The imagery should symbolically or imaginatively resonate with the meaning of the sentence, without defaulting to overused motifs (like roads, horizons, or sunsets). 
+  Keep the top-center third uncluttered for a digital clock overlay. 
+  The final design should feel modern, evocative, surprising, and visually striking.
+  `
+;
 
 const IMG_SIZE = "1024x1536"; // near 9:16
 const IMG_QUALITY = process.env.IMG_QUALITY || "low"; // 'low', 'medium', 'high', and 'auto'
