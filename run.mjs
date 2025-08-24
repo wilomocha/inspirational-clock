@@ -44,44 +44,56 @@ async function uploadToCatbox(filePath) {
     contentType: "image/png",
   });
 
-  const resp = await fetch("https://catbox.moe/user/api.php", {
+  // 1) upload the file
+  const uploadResp = await fetch("https://catbox.moe/user/api.php", {
     method: "POST",
     body: form,
     headers: form.getHeaders(),
   });
+  const uploadText = (await uploadResp.text()).trim();
+  const isUrl = /^https?:\/\//i.test(uploadText);
 
-  const text = (await resp.text()).trim();
-  const isUrl = /^https?:\/\//i.test(text);
-
-  if (resp.ok && isUrl) return text;
-
-  // Add image to album
-async function addToAlbum({ short, files }) {
-  if (!CATBOX_USERHASH) throw new Error("addToAlbum requires CATBOX_USERHASH.");
-  const form = new FormData();
-  form.append("reqtype", "addtoalbum");
-  form.append("userhash", CATBOX_USERHASH);
-  form.append("short", CATBOX_ALBUM_SHORT);
-  form.append("files", files.join(" "));
-  const resp = await fetch("https://catbox.moe/user/api.php", {
-    method: "POST",
-    body: form,
-    headers: form.getHeaders(),
-  });
-  const text = (await resp.text()).trim();
-  if (!resp.ok || /ERROR/i.test(text)) {
-    throw new Error(`addToAlbum failed (${resp.status}): ${text}`);
-  }
-  return true;
-}
-  
-
-  // Helpful diagnostics
-  if (/Anon Uploads are temporarily paused/i.test(text)) {
-    throw new Error("Catbox upload failed: anonymous uploads are paused and no valid userhash was used.");
+  if (!(uploadResp.ok && isUrl)) {
+    if (/Anon Uploads are temporarily paused/i.test(uploadText)) {
+      throw new Error("Catbox upload failed: anonymous uploads are paused and no valid userhash was used.");
+    }
+    throw new Error(`Catbox upload failed (status ${uploadResp.status}): ${uploadText}`);
   }
 
-  throw new Error(`Catbox upload failed (status ${resp.status}): ${text}`);
+  const fileUrl = uploadText;
+
+  // 2) if authenticated AND album short is set, add the uploaded file to the album
+  if (userhash && CATBOX_ALBUM_SHORT) {
+    try {
+      const shortname = path.basename(new URL(fileUrl).pathname); // e.g. "abcdef.png"
+      const albumForm = new FormData();
+      albumForm.append("reqtype", "addtoalbum");
+      albumForm.append("userhash", userhash);
+      albumForm.append("short", CATBOX_ALBUM_SHORT);     // fixed album
+      albumForm.append("files", shortname);              // space-separated list; single file here
+
+      const albumResp = await fetch("https://catbox.moe/user/api.php", {
+        method: "POST",
+        body: albumForm,
+        headers: albumForm.getHeaders(),
+      });
+      const albumText = (await albumResp.text()).trim();
+
+      if (!albumResp.ok || /ERROR/i.test(albumText)) {
+        throw new Error(`addtoalbum failed (${albumResp.status}): ${albumText}`);
+      }
+      console.log(`[catbox] Added ${shortname} to album ${CATBOX_ALBUM_SHORT}`);
+    } catch (err) {
+      // If album add fails, surface the error (you can downgrade to console.warn if you prefer non-fatal)
+      throw err;
+    }
+  } else if (!userhash) {
+    console.log("[catbox] No CATBOX_USERHASH; skipping album add.");
+  } else if (!CATBOX_ALBUM_SHORT) {
+    console.log("[catbox] No CATBOX_ALBUM_SHORT configured; skipping album add.");
+  }
+
+  return fileUrl;
 }
 
 async function buildClockPage(imageUrl) { 
