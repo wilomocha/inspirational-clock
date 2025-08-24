@@ -1,6 +1,6 @@
 {
   "name": "Inspiration Clock",
-  "short_name": "Clock",
+  "short_name": "Inspiration Clock",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
