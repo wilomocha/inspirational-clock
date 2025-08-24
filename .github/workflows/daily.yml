@@ -2,8 +2,7 @@ name: Daily Inspiration Clock
 
 on:
   schedule:
-    # Runs daily at 13:00 UTC (06:00 Los Angeles during PDT; 05:00 during PST)
-    - cron: "0 13 * * *"
+    - cron: "0 13 * * *"   # daily 13:00 UTC
   workflow_dispatch: {}
 
 permissions:
@@ -26,34 +25,47 @@ jobs:
       - name: Install deps
         run: npm ci || npm i
 
+      # ⬇️ Retry the build up to 3 times, waiting 5 minutes between tries
       - name: Build (generate image, upload to Catbox, write index.html & data/links.json)
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          CATBOX_USERHASH: ${{ secrets.CATBOX_USERHASH }}
-        run: npm run build
+        uses: nick-fields/retry@v3
+        with:
+          max_attempts: 3
+          retry_wait_seconds: 300
+          timeout_minutes: 20
+          shell: bash
+          command: |
+            OPENAI_API_KEY="${{ secrets.OPENAI_API_KEY }}" \
+            CATBOX_USERHASH="${{ secrets.CATBOX_USERHASH }}" \
+              npm run build
 
-      # ✅ Commit the updated data/links.json (and any other generated files you want to persist)
-      - name: Commit link log
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          if [ -n "$(git status --porcelain)" ]; then
-            git add data/links.json
-            git commit -m "chore: append Catbox link for $(date -u +'%Y-%m-%d')"
-            git push
-          else
-            echo "No changes to commit."
-          fi
+      # ⬇️ Retry commit/push (guards against transient network/race issues)
+      - name: Commit link log (retry)
+        uses: nick-fields/retry@v3
+        with:
+          max_attempts: 3
+          retry_wait_seconds: 300
+          timeout_minutes: 5
+          shell: bash
+          command: |
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            if [ -n "$(git status --porcelain)" ]; then
+              git add data/links.json
+              git commit -m "chore: append Catbox link for $(date -u +'%Y-%m-%d')"
+              git push
+            else
+              echo "No changes to commit."
+            fi
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
-
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: .
 
+      # (Optional) If deploy is sometimes flaky for you, also wrap this in retry the same way
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
