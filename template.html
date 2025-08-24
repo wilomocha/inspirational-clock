@@ -40,6 +40,23 @@
     padding: 0;
   }
 
+    .adbar {
+    position: fixed;
+    left: 50%;
+    bottom: 16px;                  /* above the fullscreen button a bit */
+    transform: translateX(-50%);
+    z-index: 4;                    /* above wallpaper (z:1), clock (z:2), fs-btn (z:3) */
+    padding: 8px 10px;
+    border-radius: 12px;
+    background: rgba(0,0,0,.25);
+    backdrop-filter: blur(8px);
+  }
+  
+  .adbar a {
+    display: inline-block;         /* keeps your button shape */
+    text-decoration: none;
+  }
+
   #clock-time {
     display: block;
     width: 100%;
@@ -109,11 +126,12 @@
     <div id="clock-date" style="font-size: 0.45em; font-weight: 500; opacity: 0.9;">—</div>
   </div>
   <button id="fs-btn" title="Fullscreen">⛶</button>
-  <div class="adbar" style="text-align:center;">
-  <a href="https://www.buymeacoffee.com/wilomocha" target="_blank" rel="noopener"
-     style="display:inline-block;padding:10px 14px;border-radius:8px;background:#ffdd00;color:#000;text-decoration:none;font-weight:700;">
-     ☕ Buy me a coffee
-  </a>
+  <div class="adbar">
+    <a href="https://www.buymeacoffee.com/wilomocha" target="_blank" rel="noopener"
+       style="display:inline-block;padding:10px 14px;border-radius:8px;background:#ffdd00;color:#000;text-decoration:none;font-weight:700;">
+       ☕ Buy me a coffee
+    </a>
+  </div>
 </div>
 
 
