@@ -72,6 +72,7 @@
     letter-spacing: .04em;
     line-height: 1.1;
     color: #fff;
+    cursor: pointer;
 
     /* text outline */
     text-shadow:
@@ -235,16 +236,26 @@
 
   function pad2(n){ return String(n).padStart(2,"0"); }
 
+// Persisted time-format state
+let timeFormat = localStorage.getItem('timeFormat') || '12'; // '12' | '24'
+
+  // Render time according to chosen format
+  function formatTime(d) {
+    const m = String(d.getMinutes()).padStart(2, "0");
+    if (timeFormat === '24') {
+      const h24 = String(d.getHours()).padStart(2, "0");
+      return `${h24}:${m}`;
+    } else {
+      let h = d.getHours();
+      const ampm = h >= 12 ? "PM" : "AM";
+      h = h % 12 || 12;
+      return `${h}:${m} ${ampm}`;
+    }
+  }
+  
   function tick(){
     const d = new Date();
-
-    // Time (HH:MM AM/PM)
-    let hours = d.getHours();
-    const minutes = pad2(d.getMinutes());
-    const ampm = hours >= 12 ? "PM" : "AM";
-    hours = hours % 12;
-    if (hours === 0) hours = 12;
-    document.getElementById("clock-time").textContent = `${hours}:${minutes} ${ampm}`;
+    document.getElementById("clock-time").textContent = formatTime(d);
 
     // Date (Weekday, Mon DD)
     const weekday = WEEKDAYS[d.getDay()];
@@ -486,6 +497,29 @@ installBtn.addEventListener('click', async () => {
 // Hide install button once installed
 window.addEventListener('appinstalled', () => {
   installBtn.style.display = 'none';
+});
+
+const timeEl = document.getElementById('clock-time');
+
+function toggleTimeFormat() {
+  timeFormat = (timeFormat === '12') ? '24' : '12';
+  localStorage.setItem('timeFormat', timeFormat);
+  tick();
+  requestAnimationFrame(fitClockText); // keep your width-fitting in sync
+}
+
+// accessibility & hints
+timeEl.setAttribute('role', 'button');
+timeEl.setAttribute('tabindex', '0');
+timeEl.setAttribute('aria-label', 'Clock time. Click to toggle 12/24‑hour format.');
+timeEl.title = 'Click to toggle 12/24‑hour time';
+
+timeEl.addEventListener('click', toggleTimeFormat);
+timeEl.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    toggleTimeFormat();
+  }
 });
   
 // If the tab was hidden/asleep, re-schedule on return
