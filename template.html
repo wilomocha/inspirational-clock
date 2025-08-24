@@ -171,7 +171,7 @@
   <div class="wallpaper" role="img" aria-label="Inspirational wallpaper"></div>
   <div class="clock">
     <div id="clock-time">--:--</div>
-    <div id="clock-date" style="font-size: 0.45em; font-weight: 500; opacity: 0.9;">—</div>
+    <div id="clock-date">—</div>
   </div>
   <div id="controls">
     <button id="info-btn" title="Info">ℹ️</button>
@@ -198,7 +198,6 @@
       ☕ Buy me a coffee
     </a>
   </div>
-</div>
 
 
 <script>
@@ -225,8 +224,14 @@
     document.getElementById("clock-date").textContent = `${weekday}, ${mon} ${day}`;
   }
 
+
   tick();
-  setInterval(tick, 15 * 1000);
+  fitClockText();
+  setInterval(() => {
+    tick();
+    requestAnimationFrame(fitClockText);
+  }, 15 * 1000);
+
 
 
   // --- Wake Lock to prevent screen sleep ---
