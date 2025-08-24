@@ -179,6 +179,7 @@
     <div id="clock-date">—</div>
   </div>
   <div id="controls">
+    <button id="install-btn" title="Install" style="display:none;">⬇️ Install</button>
     <button id="info-btn" title="Info">ℹ️</button>
     <button id="fs-btn" title="Fullscreen">⛶</button>
   </div>
@@ -438,6 +439,32 @@ function scheduleReload6h() {
 // start the schedule
 scheduleReload6h();
 
+// --- PWA Install button logic ---
+let deferredPrompt;
+const installBtn = document.getElementById('install-btn');
+
+// Show button when install prompt is available (Chromium)
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  installBtn.style.display = 'inline-block';
+  showControls(); // briefly reveal controls so users see the new button
+});
+
+// Click → show native install prompt
+installBtn.addEventListener('click', async () => {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  const { outcome } = await deferredPrompt.userChoice; // 'accepted' | 'dismissed'
+  deferredPrompt = null;
+  installBtn.style.display = 'none';
+});
+
+// Hide install button once installed
+window.addEventListener('appinstalled', () => {
+  installBtn.style.display = 'none';
+});
+  
 // If the tab was hidden/asleep, re-schedule on return
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'visible') {
@@ -447,6 +474,7 @@ document.addEventListener('visibilitychange', () => {
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js').catch(console.error);
   }
+  
 </script>
 
 </body>
