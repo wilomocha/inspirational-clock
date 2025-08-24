@@ -26,7 +26,7 @@ const PROMPT =
 ;
 
 const IMG_SIZE = "1024x1536"; // near 9:16
-const IMG_QUALITY = process.env.IMG_QUALITY || "low"; // 'low', 'medium', 'high', and 'auto'
+const IMG_QUALITY = process.env.IMG_QUALITY || "medium"; // 'low', 'medium', 'high', and 'auto'
 const CATBOX_ALBUM_SHORT = "ou6aoj" // CATBOX_ALBUM_SHORT code
 
 async function generateImage() {
