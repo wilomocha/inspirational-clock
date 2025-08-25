@@ -29,7 +29,7 @@ jobs:
       - name: Build (generate image, upload to Catbox, write index.html & data/links.json)
         uses: nick-fields/retry@v3
         with:
-          max_attempts: 3
+          max_attempts: 6
           retry_wait_seconds: 300
           timeout_minutes: 20
           shell: bash
