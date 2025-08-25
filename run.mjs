@@ -15,7 +15,7 @@ Avoid motivational clichés or overused phrases such as believe in yourself, fol
 Also avoid generic poster words like dream, journey, path, light, destiny, inspire, possible, hope, future, goal, or success unless combined in a surprising or unusual way. 
 The sentence should be clear, natural English but combine ideas in a slightly unexpected or poetic way that sparks curiosity or a new perspective.
 
-Render this exact sentence on a vertical 9:16  wallpaper, without changing or distorting it. 
+Render this exact sentence on a vertical 9:16 wallpaper, without changing or distorting it. 
 Write it in plain, clear **uppercase letters (A–Z only, plus spaces and standard punctuation)**. 
 Use a clean sans-serif font with normal spacing (no compression or stretching). 
 Do not use decorative fonts, cursive, handwriting, ligatures, or stylized distortions. 
