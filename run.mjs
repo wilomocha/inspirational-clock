@@ -9,7 +9,7 @@ const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 const PROMPT = 
   `
   Create a vertical 9:16 inspirational wallpaper.
-  First, generate a short, completely original sentence (under 12 words) that feels fresh, uplifting, and thought-provoking while avoiding familiar clichés.
+  First, generate a short, completely original sentence (under 12 words) that feels fresh, imaginative, and thought-provoking. Avoid motivational clichés or overused phrases such as believe in yourself, follow your dreams, anything is possible, or similar. The wording should be clear English but combine ideas in a slightly surprising or poetic way that sparks curiosity or a new perspective.
   The sentence must be in correct English, with no misspellings, no invented words, and no extra punctuation.
   Render this exact sentence on the wallpaper, without changing or distorting it. 
   Write it in plain, clear **uppercase letters (A–Z only, plus spaces and standard punctuation)**. 
