@@ -17,7 +17,7 @@ const PROMPT =
   Do not merge or alter letters. Do not omit or repeat letters. 
   The text must be fully legible, sharp, and correctly spelled. 
   Keep the background behind the text simple so every letter is easy to read. 
-  Place the text in the lower half of the image, centered, with generous margins, and ensure the entire sentence stays fully inside the frame. 
+  Place the text in the lower half of the image, centered, with generous margins, and ensure the entire sentence stays fully inside the frame. The lowest text baseline must sit at least 5% above the image bottom edge.
   Design a background in any creative visual style—this could be photorealistic nature, painterly realism, minimalist design, abstract surrealism, whimsical illustration, or bold typography-led art. 
   The imagery should symbolically or imaginatively resonate with the meaning of the sentence, without defaulting to overused motifs (like roads, horizons, or sunsets). 
   Keep the top-center third uncluttered for a digital clock overlay. 
