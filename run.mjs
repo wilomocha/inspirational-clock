@@ -8,7 +8,7 @@ const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 const PROMPT = 
   `
-First, generate a short, completely original sentence (under 12 words) that feels fresh, imaginative, and thought-provoking. 
+First, generate a short, completely original sentence (under 12 words) that feels fresh, uplifting, imaginative, and thought-provoking. 
 The wording must use only valid, correctly spelled English dictionary words. 
 Do not invent new words, merge words, or alter word forms unnaturally. 
 Avoid motivational clichés or overused phrases such as believe in yourself, follow your dreams, anything is possible, or similar. 
