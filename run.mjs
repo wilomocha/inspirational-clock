@@ -8,20 +8,33 @@ const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 const PROMPT = 
   `
-  Create a vertical 9:16 inspirational wallpaper.
-  First, generate a short, completely original sentence (under 12 words) that feels fresh, imaginative, and thought-provoking. Avoid motivational clichés or overused phrases such as believe in yourself, follow your dreams, anything is possible, or similar. The wording should be clear English but combine ideas in a slightly surprising or poetic way that sparks curiosity or a new perspective.
-  The sentence must be in correct English, with no misspellings, no invented words, and no extra punctuation.
-  Render this exact sentence on the wallpaper, without changing or distorting it. 
-  Write it in plain, clear **uppercase letters (A–Z only, plus spaces and standard punctuation)**. 
-  Do not use decorative fonts, cursive, handwriting, ligatures, or stylized distortions. 
-  Do not merge or alter letters. Do not omit or repeat letters. 
-  The text must be fully legible, sharp, and correctly spelled. 
-  Keep the background behind the text simple so every letter is easy to read. 
-  Place the text in the lower half of the image, centered, with generous margins, and ensure the entire sentence stays fully inside the frame. The lowest text baseline must sit at least 5% above the image bottom edge.
-  Design a background in any creative visual style—this could be photorealistic nature, painterly realism, minimalist design, abstract surrealism, whimsical illustration, or bold typography-led art. 
-  The imagery should symbolically or imaginatively resonate with the meaning of the sentence, without defaulting to overused motifs (like roads, horizons, or sunsets). 
-  Keep the top-center third uncluttered for a digital clock overlay. 
-  The final design should feel modern, evocative, surprising, and visually striking.
+Create a vertical 9:16 inspirational wallpaper.
+
+First, generate a short, completely original sentence (under 12 words) that feels fresh, imaginative, and thought-provoking. 
+The wording must use only valid, correctly spelled English dictionary words. 
+Do not invent new words, merge words, or alter word forms unnaturally. 
+Avoid motivational clichés or overused phrases such as believe in yourself, follow your dreams, anything is possible, or similar. 
+Also avoid generic poster words like dream, journey, path, light, destiny, inspire, possible, hope, future, goal, or success unless combined in a surprising or unusual way. 
+The sentence should be clear, natural English but combine ideas in a slightly unexpected or poetic way that sparks curiosity or a new perspective.
+
+Render this exact sentence on the wallpaper, without changing or distorting it. 
+Write it in plain, clear **uppercase letters (A–Z only, plus spaces and standard punctuation)**. 
+Use a clean sans-serif font with normal spacing (no compression or stretching). 
+Do not use decorative fonts, cursive, handwriting, ligatures, or stylized distortions. 
+Do not merge or alter letters. Do not omit or repeat letters. 
+The text must be fully legible, sharp, evenly spaced, and correctly spelled.
+
+Keep the background directly behind the text simple so every letter is easy to read. 
+Place the text in the lower half of the image, centered, with generous margins. 
+Ensure the entire sentence is fully inside the frame, with no cropping or truncation. 
+Leave a clear empty margin below the text so no letter touches the image edge. 
+The lowest text baseline must sit at least 5% above the bottom edge.
+
+Design a background in any creative visual style—this could be photorealistic nature, painterly realism, minimalist design, abstract surrealism, whimsical illustration, or bold typography-led art. 
+The imagery should symbolically or imaginatively resonate with the meaning of the sentence, without defaulting to overused motifs (like roads, horizons, or sunsets). 
+
+Keep the top-center third uncluttered for a digital clock overlay. 
+The final design should feel modern, evocative, surprising, and visually striking.
   `
 ;
 
