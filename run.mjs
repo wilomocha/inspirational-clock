@@ -40,7 +40,9 @@ The final design should feel modern, evocative, surprising, and visually strikin
 `;
 
 const IMG_SIZE = "1024x1536"; // near 9:16
-const IMG_QUALITY = "medium"; // reduce per-image cost
+
+const IMG_QUALITY = "low"; // reduce per-image cost
+
 const CATBOX_ALBUM_SHORT = "ou6aoj" // CATBOX_ALBUM_SHORT code
 
 async function generateQuote() {
@@ -58,8 +60,10 @@ async function generateQuote() {
 async function generateImage(quote) {
   const prompt = buildImagePrompt(quote.toUpperCase());
   const res = await client.images.generate({
-    model: "gpt-image-1",
+
+    model: "gpt-image-1.5",
     prompt,
+
     size: IMG_SIZE,
     quality: IMG_QUALITY,     // ✅ set quality here
   });
