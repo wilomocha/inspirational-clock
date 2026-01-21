@@ -37,12 +37,12 @@ The final design should feel modern, evocative, surprising, and visually strikin
 ; 
 
 const IMG_SIZE = "1024x1536"; // near 9:16
-const IMG_QUALITY = process.env.IMG_QUALITY || "medium"; // 'low', 'medium', 'high', and 'auto'
+const IMG_QUALITY = process.env.IMG_QUALITY || "low"; // 'low', 'medium', 'high', and 'auto'
 const CATBOX_ALBUM_SHORT = "ou6aoj" // CATBOX_ALBUM_SHORT code
 
 async function generateImage() {
   const res = await client.images.generate({
-    model: "gpt-image-1",
+    model: "gpt-image-1.5",
     prompt: PROMPT,
     size: IMG_SIZE,
     quality: IMG_QUALITY,     // ✅ set quality here
