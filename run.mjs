@@ -27,7 +27,7 @@ Do not merge or alter letters. Do not omit or repeat letters.
 The text must be fully legible, sharp, evenly spaced, and correctly spelled.
 
 Keep the background directly behind the text simple so every letter is easy to read.
-Place the text in the lower half of the image, centered, with generous margins.
+Place the text in the lower one-third of the image, centered, with generous margins.
 Ensure the entire sentence is fully inside the frame, with no cropping or truncation.
 Leave a clear empty margin below the text so no letter touches the image edge.
 The lowest text baseline must sit at least 5% above the bottom edge.
